@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+	<title>Model Building for Bankruptcy Prediction</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<style>
+        body {
+            background-color: #F5FFFA;
+        }
+	</style>
+</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="divided">
+
+			<!-- One -->
+			<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+				<div class="content">
+					<h1 style="text-align: center;">Data Analysis with Bankruptcy Prediction Dataset</h1>
+					<h2>Summary</h2>
+					<p class="major">
+						<b>Objective</b>: Develop an advanced predictive classification model on Bankruptcy Prediction for the dataset present at
+						<a href="https://www.kaggle.com/datasets/fedesoriano/company-bankruptcy-prediction/" target="_blank">
+							https://www.kaggle.com/datasets/fedesoriano/company-bankruptcy-prediction/
+						</a>
+					</p>
+					<p class="major"><b>Requirement</b> : To identify independent variables that has a major impact on Bankruptcy  </p>
+					<p class="major"><b>Problem Type</b> - CLASSIFICATION PROBLEM</p>
+					<p class="major"><b>Major Problem</b>: Dataset has 90+ Independent Variables</p>
+					<p class="major">
+						<b>Options:</b><ol style="list-style-type: decimal;">
+							<li>Domain Knowledge : Understanding each variables and try to understand its impact on target variable</li>
+							<li>Dimensionality Reduction : Try to reduce number of independent variables used for analysis</li>
+						</ol>
+					</p>
+					<p class="major"><b>Benefit with Domain Knowledge Method</b>: Helps to understand, which of the values in the columns are valid values or are Outliers. For example, long distance travelled in case of taxi rides are not Outliers but valid values for distance variable in case of ride and fare dataset</p>
+					<p class="major">
+						<b>Problem with Domain Knowledge Method</b> :<ol style="list-style-type: circle;">
+							<li>Understanding each of the 90+ variables and their impact on target variable, one by one is a tiresome task.</li>
+							<li>It might include biases in the result, which might result in chances of loosing important variables</li>
+						</ol>
+					</p>
+					<p class="major">
+
+						<b>Dimensionality Reduction and its Ways:</b><ol style="list-style-type: decimal;">
+							<li><b>Feature Selection</b> - A Dimensionality Reduction way to choose a subset of most relevant independent variables </li>
+							<li>
+								<b>Feature Extraction</b> - Combining Existing Features to form new Feature Vector like with Principal Component Analysis (PCA)
+								<br>
+								<b style="font-size:14px;">Problem</b>:
+								<i style="font-size: 14px;">We don’t want to combine independent variables but want to check for relevant independent variables / Features</i>
+								</br>
+							</li>
+						</ol>
+
+						<b>DATA PRE-PROCESSING</b> - Since Column Names has spaces in between so Column Names are renamed with X1 - X95 and Target Variable as Y
+
+					</p>
+					<p class="major">
+						<b>STEPS FOLLOWED:</b><ol style="list-style-type: decimal;">
+
+							<p class="minor">
+								<b>EDA</b>
+								<br><br>
+								<ol style="list-style-type: decimal;">
+									<li>
+										<b>Finding Relationship Between Variables</b>
+										<br><br>
+										<ol type="A">
+											<li>
+												<b>Correlation Between Continuous Independent Variable and Categorical Target Variable</b>
+												<br><br>
+												<ul>
+													<li><b>Statistical Method: Point Biserial Correlation Method - </b> Since we know that to find a Relationship between a Continuous Variable and an Ordinal Categorical Variable, we have Spearman's Rank Correlation. Point Biserial is a special case of Spearman's Rank where the Categorical Variable has a Binary Outcome.</li>
+													<br />
+													<li><b>Visual Method: Jitter Plot - </b> To find if there is any clear segregating boundary of Binary Outcome for any of the Continuous Variables. Consider this example: Suppose the result of me attending tomorrow's morning class depends on the number of hours of sleep I had last night. There are high chances of attending the class if sleeping hours are greater than 5. So, there will be a clear segregating boundary (0-5) | (5-10).</li>
+												</ul>
+												<br><br>
+												<i><b>Result: </b> Though there are no clear segregating boundaries for any of the continuous variables with the target variable using Jitter Plot, Point Biserial gives some idea of each variable's correlation with the target variable.</i>
+												<br><br>
+											</li>
+											<li>
+												<b>Correlation Between Categorical Independent Variable and Categorical Target Variable</b>
+												<ul>
+													<br />
+													<li><b>Statistical Method: Fisher Exact Test - </b> To find a Relationship between an Independent Categorical Variable and Dependent Categorical Variable, we use the Chi-Squared Test. Fisher Exact Test is a special case of Chi-Squared Test where the Sample Size in any category of the Contingency Table is less than 5.</li>
+												</ul>
+												<br><br>
+												<i><b>Result: </b> There are only two Categorical Independent Variables - X85 (Liability Asset Flag) and X94 (Net Income Flag). X94 has only a single value for all records, so it does not impact the Target Variable and was removed from the analysis. The second variable, X85 (Liability Asset Flag), showed a positive correlation with the Target Variable from the Fisher Exact Test. This seems valid by domain understanding, as a Liability Asset Flag of 1 means the company has more liabilities than assets, leading to higher chances of bankruptcy (value 1).</i>
+												<br><br>
+											</li>
+											<li>
+												<b>Correlation Between Continuous Independent Variable and Another Continuous Independent Variable</b>
+												<br><br>
+												<ul>
+													<li><b>Statistical Method: Pearson Correlation</b></li>
+													<br />
+													<i style="font-size: 14px;">Note: Results are stored in correlation_matrix.xlsx</istyle="font-size:>
+											</li>
+											</ul>
+											<i><b>Result: </b> Variables were found to be highly correlated. For example, X16 (Net Value Per Share (B)) and X17 (Net Value Per Share (A)) have a Correlation Value of 0.9993. Similarly, X16 (Net Value Per Share (B)) and X18 (Net Value Per Share (C)) have a Correlation Value of 0.9992.</i>
+											<br>
+											<br>
+									</li>
+								</ol>
+								<i><b>Summary Result: </b> Using the Point Biserial Method, we identified the magnitude and direction of influence of different independent variables on the Target Variable. The Pearson Correlation Method revealed that we have highly correlated independent variables.</i>
+								<br><br>
+								</li>
+							<li>
+								<b>Missing Values</b>
+								<br><br>
+								<b>Result: </b> There are no missing values in the records.
+								<br>
+								<i style="font-size: 14px;">
+									Note: Results are stored in Null_Check.xlsx</istyle="font-size:>
+									<br><br>
+							</li>
+							<li>
+								<b>Outliers</b>
+								<br><br>
+								<b>Result: </b> Yes, there are outliers in most of the Independent Variables. Outliers are detected based on the z-score formula:
+								\((\text{value - mean}) / \text{Standard Deviation}\). Values greater than 3 are considered outliers.
+								<br>
+								<b>Note: Outliers were not treated because we are unsure if they are real outliers or valid values.</b>
+								<br>
+								<i style="font-size: 14px;">Note: Results are stored in Outlier_Check.xlsx</i>
+								<br><br>
+							</li>
+							<li>
+								<b>Class Distribution of Target Variable</b>
+								<br><br>
+								<b>Result: </b> The Target Variable is highly imbalanced. 0 (Not Bankrupt) has 6599 records, while 1 (Bankrupt) has 220 records.
+								<br><br>
+							</li>
+						</ol>
+					</p>
+
+
+					<p class="minor">
+						<b>Another Problem</b>: Highly Imbalance Classes
+						<br><br>
+						<b>Options:</b><ol style="list-style-type: decimal;">
+							<li>
+								<b>OverSampling  </b> - SMOTE (Synthetic Minority Oversampling Technique)
+								<br><br>
+								<i><b>Benifits</b>: Balance the Target variable by synthesizing dummy records for minority class (1)</i>
+								<br><br>
+								<i><b>Problem</b>:	Make imbalance in the independent variables and their different parameters. For example, SMOTE might increase the values for X16 but not for X17, which will further affect their correlation value, thus deviating the results.</i>
+							</li>
+							<br />
+							<li>
+								<b>UnderSampling </b> - Although there are different techniques of UnderSampling like Naive Random UnderSampling, K-Means UnderSampling etc but just to avoid missing records randomly and to avoid complexity, simple approach of taking different samples from Majority Class (0) with the size equal to Minority Class (1) is taken.
+								<i> Sample 1 : FIRST [:220] records from Majority Class ; Sample 2 : (END) [6379:] records from Majority Class ; Sample 3 : MIDDLE [3190:3410] records from Majority Class</i>
+							</li>
+
+						</ol>
+					</p>
+					<p class="minor">
+						<b>Model Building</b>
+						<ol style="list-style-type: decimal;">
+
+							<li>
+								<b>Logistic Regression</b>
+								<br><br>
+								<b>Since it's a Parametric Model, it has various Assumptions attached to it:</b>
+								<br><br>
+								<ul style="margin-top: 10px; margin-bottom: 10px;">
+									<li style="margin-bottom:15px;">
+										<b>Data should be Normally Distributed - Normality Test - Shapiro-Wilk Test</b>
+										<br>
+										<i>Result: No Continuous Variable has Normally Distributed Data</i>
+										<br>
+										<i style="font-size: 14px;">Note: Results are stored in Coefficient_Analysis.xlsx (Normality_Test_Results)</i>
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Observations to be independent of each other.</b> – Passed – Since each record taken is of individual user data, the observations are independent of each other.
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Little or No multicollinearity among the independent variables</b> - Variance Inflation Factor (VIF) is used to check Multi-Collinearity.
+										<br>
+										<i>Result: High VIF value for most of the variables</i>
+										<br>
+										<i style="font-size: 14px;">Note: Results are stored in VIF_Check.xlsx</i>
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Assumes linearity of independent variables and log odds.</b> - Box-Tidwell Test
+										<br>
+										<i>Result: Non-Linearity between Log Odds and most of the variables</i>
+										<br>
+										<i style="font-size: 14px;">Note: Results are stored in Coefficient_Analysis.xlsx (Linearity_Log_Odds_Results)</i>
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Large Sample Size</b> – Failed; Minimum Threshold = 10; Records in minority class (B) = 220; Number of Independent Variables (C) = 95; B/C < A = 2.3 < 10, Not Enough records.
+									</li>
+								</ul>
+								<br>
+								<b>Logistic Model is tested with all three samples, and Sample 3 (Middle Records) of Majority Class (0) showed better results than the other 2 samples.</b>
+								<br><br>
+								<ul style="margin-top: 10px; margin-bottom: 10px;">
+									<li style="margin-bottom:15px;">
+										<b>Regularization</b> - A technique to prevent overfitting by penalizing large coefficients or complex models.
+										<br>
+										<b>All three Methods (Lasso (L1 Error), Ridge (L2 Error), and ElasticNet) were tested on Logistic Regression Model</b>
+										<br>
+										<i>Result: ElasticNet showed better results than the other two methods in terms of Accuracy and F1-Score.</i>
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Hyper-Parameter Tuning</b> - The process of finding the best values for hyperparameters to optimize model performance.
+										<br>
+										<b>GridSearch and RandomSearch were tested on top of Logistic Regression Model with ElasticNet</b>
+										<br>
+										<i>Result: GridSearch showed better results than RandomSearch in terms of Accuracy and F1-Score.</i>
+									</li>
+								</ul>
+								<br>
+								<i><b>Result:</b> Logistic Regression regularized with ElasticNet and tuned with GridSearch gave better results than all other techniques so far.</i>
+							</li>
+
+							<br>
+							<li>
+								<b>Decision Tree</b> - Since it's a Non-Parametric Model, it does not require any pre-assumption.
+								<br><br>
+								<ul style="margin-top: 10px; margin-bottom: 10px;">
+									<li>
+										<b>Gradient Boosting</b> - A technique that builds an ensemble of models sequentially to minimize errors.
+										<br>
+										<b>XgBoost and CatBoost were tested on the train and test data without any Standard or Robust Scaling</b>
+										<br>
+										<i>Result: CatBoost showed results similar to the Previous Best case of Logistic Regression, while XGBoost showed even better results with 100% precision for class 0 and an accuracy of 97%, which needs further analysis.</i>
+									</li>
+								</ul>
+							</li>
+
+							<br>
+							<li>
+								<b>Random Forest</b> - Since it's a Non-Parametric Model, it does not require any pre-assumption.
+								<br><br>
+								<ul style="margin-top: 10px; margin-bottom: 10px;">
+									<li style="margin-bottom:15px;">
+										<b>Random Forest with Recursive Feature Elimination and Cross Validation (RFECV)</b> - It's a Feature Selection Technique to find the subset of the most relevant features based on the ML Model. Since Random Forest gave better results than Decision Tree, therefore RFECV is used with Random Forest.
+									</li>
+									<li style="margin-bottom:15px;">
+										<b>Principal Component Analysis (PCA) with Random Forest</b>
+										<br>
+										<i>Result: Both methods were used for dimensionality reduction to extract the relevant features.</i>
+										<br>
+										<i style="font-size: 14px;">Note: PCA results are stored in PCA.xlsx</i>
+									</li>
+								</ul>
+							</li>
+
+						</ol>
+					</p>
+
+					<br><br>
+					<p class="major">
+						<b>FINAL RESULT:</b> Below are the Independent Variables that satisfy Box-Tidwell Method, Point-Biserial Method; that showed significant contribution in RFECV and PCA; that have high Coefficient Values for all the models (GridSearch, CatBoost, XGBoost):
+					</p>
+					<p class="major">
+						<ol style="list-style-type: circle;margin-top:10px;">
+							<li style="margin-bottom:15px;">
+								<b>Positive Correlated:</b>
+								<i>X37 ('Debt ratio %'); X84 ('Current Liability to Current Assets')</i>
+							</li>
+							<br>
+							<li style="margin-bottom:15px;">
+								<b>Negatively Correlated:</b>
+								<i>X1 ('ROA(C) before interest and depreciation before interest'); X3 ('ROA(B) before interest and depreciation after tax'); X19 ('Persistent EPS in the Last Four Seasons')</i>
+							</li>
+						</ol>
+						</p>
+
+						<ul class="actions stacked">
+							<li><a href="https://github.com/ShivamDhawan330/Bankruptcy_Prediction_Analysis" target="_blank" class="button big wide smooth-scroll-middle">GitHub Code</a></li>
+						</ul>
+						<style>
+							.image-container {
+								width: 1341px;
+								height: 511px;
+								overflow: hidden;
+							}
+
+								.image-container img {
+									width: 100%;
+									height: auto;
+									object-fit: cover;
+								}
+						</style>
+				</div>
+		</section>
+	</div>
+	<div class="image-container">
+		<img src="images/Evaluation_Results.png" alt="Evaluation Results" />
+	</div>
+
+
+	<footer class="wrapper style1 align-center">
+		<div class="inner">
+			<ul class="icons">
+				<li><a href="https://www.youtube.com/channel/UCeNV_T7ckOQ8aTmfrSmOfpw" target="_blank" class="icon brands fa-youtube"><span class="label">youtube</span></a></li>
+				<li><a href="https://github.com/ShivamDhawan330" target="_blank" class="icon brands fa-github"><span class="label">Github</span></a></li>
+				<li><a href="https://www.linkedin.com/in/shivam-dhawan-b1b83b178/" target="_blank" class="icon brands fa-linkedin"><span class="label">linkedin</span></a></li>
+				<li><a href="mailto:shivam.dhawan330@gmail.com" target="_blank" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+				<li><a href="https://medium.com/@shivam.dhawan330" target="_blank" class="icon brands fa-medium"><span class="label">linkedin</span></a></li>
+			</ul>
+		</div>
+	</footer>
+			
+					<script src="assets/js/jquery.min.js"></script>
+					<script src="assets/js/jquery.scrollex.min.js"></script>
+					<script src="assets/js/jquery.scrolly.min.js"></script>
+					<script src="assets/js/browser.min.js"></script>
+					<script src="assets/js/breakpoints.min.js"></script>
+					<script src="assets/js/util.js"></script>
+					<script src="assets/js/main.js"></script>
+
+	</body>
+	</html>
+					
